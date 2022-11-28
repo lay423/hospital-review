@@ -2,9 +2,11 @@ package com.hospital_review.domain.dto;
 
 import com.hospital_review.domain.User;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Builder
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
