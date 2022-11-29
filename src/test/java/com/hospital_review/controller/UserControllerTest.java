@@ -36,6 +36,12 @@ class UserControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
+    UserJoinRequest userJoinRequest = UserJoinRequest.builder()
+            .userName("junha")
+            .password("1234")
+            .email("junha@gamil.com")
+            .build();
+
     @Test
     @DisplayName("회원가입 성공")
     @WithMockUser
@@ -45,7 +51,6 @@ class UserControllerTest {
                 .password("1q2w3e4r")
                 .email("oceanfog1@gmail.com")
                 .build();
-
 
 
         when(userService.join(any())).thenReturn(mock(UserDto.class));
@@ -60,12 +65,8 @@ class UserControllerTest {
     @Test
     @WithMockUser
     @DisplayName("회원가입 실패")
-    void join_fail() throws Exception{
-        UserJoinRequest userJoinRequest = UserJoinRequest.builder()
-                .userName("junha")
-                .password("1234")
-                .email("junha@gamil.com")
-                .build();
+    void join_fail() throws Exception {
+
 
         when(userService.join(any())).thenThrow(new HospitalReviewAppException(ErrorCode.DUPLICATED_USER_NAME, ""));
 
@@ -75,5 +76,33 @@ class UserControllerTest {
                         .content(objectMapper.writeValueAsBytes(userJoinRequest)))
                 .andDo(print())
                 .andExpect(status().isConflict());
+    }
+
+    @Test
+    @DisplayName("로그인 실패 - id 없음")
+    @WithMockUser
+    void login_fail1() throws Exception {
+        String id = "junha";
+        String password = "1234";
+        when(userService.login(any(), any())).thenThrow(new HospitalReviewAppException(ErrorCode.NOT_FOUND, ""));
+
+        mockMvc.perform(post("/api/v1/users/join")
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsBytes(userJoinRequest)))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("로그인 실패 - password 잘못 입력")
+    @WithMockUser
+    void login_fail2() throws Exception {
+    }
+
+    @Test
+    @DisplayName("로그인 성공")
+    @WithMockUser
+    void login_success() throws Exception {
     }
 }
