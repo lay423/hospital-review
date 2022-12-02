@@ -25,7 +25,7 @@ public class UserService {
     @Value("${jwt.token.secret")
     private String secretKey;
 
-    private long expiredTimeMs = 1000 * 60 * 60;
+    private final long expiredTimeMs = 1000 * 60 * 60;
 
     public UserDto join(UserJoinRequest request) {
         // 비즈니스 로직 - 회원 가입
