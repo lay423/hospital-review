@@ -9,4 +9,6 @@ import lombok.NoArgsConstructor;
 @Getter
 public class ReviewCreateRequest {
     private int id;
+    private String name;
+
 }
